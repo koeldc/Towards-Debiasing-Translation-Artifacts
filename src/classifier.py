@@ -1,63 +1,23 @@
-#Code ported from nullspace_projection <https://github.com/shauli-ravfogel/nullspace_projection/tree/master/src> 
 import numpy as np
 
-
-# an abstract class for linear classifiers
-
-class Classifier(object):
-
+class Classifier:
     def __init__(self):
-
         pass
-
-    def train(self, X_train: np.ndarray, Y_train: np.ndarray, X_dev: np.ndarray, Y_dev: np.ndarray) -> float:
-        """
-
-        :param X_train:
-        :param Y_train:
-        :param X_dev:
-        :param Y_dev:
-        :return: accuracy score on the dev set
-        """
+    def train(self, X_train, Y_train, X_dev, Y_dev):
         raise NotImplementedError
-
-    def get_weights(self) -> np.ndarray:
-        """
-        :return: final weights of the model, as np array
-        """
-
+    def get_weights(self):
         raise NotImplementedError
-
-
-
 
 class SKlearnClassifier(Classifier):
-
     def __init__(self, m):
-
         self.model = m
-
-    def train_network(self, X_train: np.ndarray, Y_train: np.ndarray, X_dev: np.ndarray, Y_dev: np.ndarray) -> float:
-
-        """
-        :param X_train:
-        :param Y_train:
-        :param X_dev:
-        :param Y_dev:
-        :return: accuracy score on the dev set / Person's R in the case of regression
-        """
-
+    def train(self, X_train, Y_train, X_dev, Y_dev):
         self.model.fit(X_train, Y_train)
         score = self.model.score(X_dev, Y_dev)
         return score
-
-    def get_weights(self) -> np.ndarray:
-        """
-        :return: final weights of the model, as np array
-        """
-
+    def get_weights(self):
         w = self.model.coef_
         if len(w.shape) == 1:
                 w = np.expand_dims(w, 0)
-
         return w
+
